@@ -12,4 +12,5 @@ OTEL_COLLECTOR_URL=https://github.com/open-telemetry/opentelemetry-collector-con
 OTEL_COLLECTOR_PATH=/var/tmp/otelcontribcol
 wget $OTEL_COLLECTOR_URL -O $OTEL_COLLECTOR_PATH
 chmod +x $OTEL_COLLECTOR_PATH
-/var/tmp/otelcontribcol --config=~/.collector-config.yaml & disown
+
+/var/tmp/otelcontribcol --config=$HOME/collector-config.yaml & disown
