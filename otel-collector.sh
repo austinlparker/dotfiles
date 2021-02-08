@@ -13,4 +13,4 @@ OTEL_COLLECTOR_PATH=/var/tmp/otelcontribcol
 wget $OTEL_COLLECTOR_URL -O $OTEL_COLLECTOR_PATH
 chmod +x $OTEL_COLLECTOR_PATH
 
-/var/tmp/otelcontribcol --config=$HOME/collector-config.yaml & disown
+nohup /var/tmp/otelcontribcol --config=$HOME/collector-config.yaml & disown
