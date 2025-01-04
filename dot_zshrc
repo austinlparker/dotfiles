@@ -40,6 +40,13 @@ glog() {
 # Fuzzy Finder
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# ripgrep
+if type rg &> /dev/null; then
+  export FZF_DEFAULT_COMMAND='rg --files'
+  export FZF_DEFAULT_OPTS='-m'
+fi
+
+
 # bun completions
 [ -s "/Users/ap/.bun/_bun" ] && source "/Users/ap/.bun/_bun"
 
