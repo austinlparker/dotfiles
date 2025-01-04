@@ -3,6 +3,9 @@ autoload -Uz compinit
 compinit
 autoload -Uz add-zsh-hook
 
+# Environment Variables
+export GITHUB_USERNAME=austinlparker
+
 # Paths
 . "$HOME/.cargo/env"
 . "/Users/ap/.deno/env"
