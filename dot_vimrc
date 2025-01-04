@@ -1,5 +1,6 @@
 set hidden
-
+set nocp
+filetype plugin on
 
 " vim-plug bootstrapping
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
@@ -8,7 +9,7 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-# vim plugins
+" vim plugins
 call plug#begin()
 
 Plug 'junegunn/fzf.vim'
