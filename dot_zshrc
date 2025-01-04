@@ -24,6 +24,7 @@ source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 eval "$(starship init zsh)"
 
 # Aliases
+alias ls='ls --color=auto'
 alias ll='ls -la'
 alias gs='git status'
 alias cat='bat'
