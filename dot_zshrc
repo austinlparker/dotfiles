@@ -1,0 +1,44 @@
+# Basics
+autoload -Uz compinit
+compinit
+autoload -Uz add-zsh-hook
+
+# Paths
+. "$HOME/.cargo/env"
+. "/Users/ap/.deno/env"
+export PNPM_HOME="/Users/ap/Library/pnpm"
+export PATH="/Users/ap/.codeium/windsurf/bin:$PNPM_HOME:$PATH"
+
+# History
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt share_history hist_ignore_all_dups hist_ignore_space hist_verify
+
+# Plugins
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+eval "$(starship init zsh)"
+
+# Aliases
+alias ll='ls -la'
+alias gs='git status'
+alias cat='bat'
+
+# Functions
+glog() {
+  git log --oneline --graph --decorate --all
+}
+
+# Autojump
+[[ -s $(brew --prefix autojump)/etc/profile.d/autojump.sh ]] && . $(brew --prefix autojump)/etc/profile.d/autojump.sh
+
+# Fuzzy Finder
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# bun completions
+[ -s "/Users/ap/.bun/_bun" ] && source "/Users/ap/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
