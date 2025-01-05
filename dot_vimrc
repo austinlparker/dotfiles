@@ -28,12 +28,17 @@ call plug#begin()
 
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'tpope/vim-vinegar'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
 
+" airline prefs
 set laststatus=2
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
-let g:airline_theme = minimalist
+let g:airline_theme = 'minimalist'
+
+" nerdtree prefs
+map <C-n> :NERDTreeToggle<CR>
+let NERDTreeShowHidden = 1
