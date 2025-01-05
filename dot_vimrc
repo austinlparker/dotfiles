@@ -1,5 +1,6 @@
 set hidden
 set nocp
+set relativenumber number
 filetype plugin on
 
 nnoremap <silent> <C-f> :Files<CR>
@@ -28,5 +29,9 @@ call plug#begin()
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'tpope/vim-vinegar'
+Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
+
+vim set laststatus=2
+Airline let g:airline#extensions#tabline#enabled=1
