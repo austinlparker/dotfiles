@@ -7,12 +7,43 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
-  "assistant": {
+  /* Duplicated key auto-commented: "agent": {
     "default_model": {
       "provider": "anthropic",
-      "model": "claude-3-5-sonnet-latest"
+      "model": "claude-opus-4-5-thinking-latest"
     },
-    "version": "2"
+    "model_parameters": []
+  }, */
+  "ssh_connections": [
+    {
+      "host": "tangled-knot",
+      "username": "root",
+      "projects": [
+        {
+          "paths": [
+            "~/core"
+          ]
+        }
+      ]
+    }
+  ],
+  "context_servers": {
+    "kagi": {
+      "command": "uvx",
+      "args": ["kagimcp"],
+      "env": {
+      "KAGI_API_KEY": "DgBALx67sAc.pwn-1oMAdLvo4j9V3946I5wIa6vsS4Sb1sS-3O8xB5o"
+    },
+      "settings": {}
+    }
+  },
+  "agent": {
+    "default_profile": "ask",
+    "always_allow_tool_actions": true,
+    "default_model": {
+      "provider": "anthropic",
+      "model": "claude-opus-4-5-thinking-latest"
+    },
   },
   "base_keymap": "VSCode",
   "ui_font_size": 16,
@@ -36,7 +67,7 @@
       "language_servers": ["!typescript-language-server", "vtsls"]
     },
     "Markdown": {
-      "show_inline_completions": false
+      "show_edit_predictions": false
     }
   }
 }

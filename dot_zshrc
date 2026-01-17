@@ -21,6 +21,13 @@ setopt share_history hist_ignore_all_dups hist_ignore_space hist_verify
 # Plugins
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Auto-detect macOS appearance for starship theme
+if [[ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" == "Dark" ]]; then
+  export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+else
+  export STARSHIP_CONFIG="$HOME/.config/starship-light.toml"
+fi
 eval "$(starship init zsh)"
 
 # Aliases
@@ -53,3 +60,6 @@ fi
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+alias claude="/Users/ap/.claude/local/claude"
+
+export PATH=$PATH:$(go env GOPATH)/bin
