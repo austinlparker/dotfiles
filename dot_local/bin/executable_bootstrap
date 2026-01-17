@@ -1,0 +1,72 @@
+#!/bin/bash
+set -e
+
+echo "==> Starting bootstrap..."
+
+# Homebrew
+if ! command -v brew &>/dev/null; then
+    echo "==> Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+    echo "==> Homebrew already installed"
+fi
+
+# chezmoi and dotfiles
+if ! command -v chezmoi &>/dev/null; then
+    echo "==> Installing chezmoi..."
+    brew install chezmoi
+fi
+
+if [ ! -d "$HOME/.local/share/chezmoi" ]; then
+    echo "==> Initializing dotfiles..."
+    chezmoi init --apply austinlparker
+else
+    echo "==> Updating dotfiles..."
+    chezmoi update
+fi
+
+# Brewfile
+echo "==> Installing brew packages..."
+brew bundle --file="$HOME/.config/brewfile"
+
+# TPM (Tmux Plugin Manager)
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+    echo "==> Installing TPM..."
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+else
+    echo "==> TPM already installed"
+fi
+
+# Rust
+if ! command -v rustup &>/dev/null; then
+    echo "==> Installing Rust..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    source "$HOME/.cargo/env"
+else
+    echo "==> Rust already installed"
+fi
+
+# Bun
+if ! command -v bun &>/dev/null; then
+    echo "==> Installing Bun..."
+    curl -fsSL https://bun.sh/install | bash
+else
+    echo "==> Bun already installed"
+fi
+
+# Deno
+if ! command -v deno &>/dev/null; then
+    echo "==> Installing Deno..."
+    curl -fsSL https://deno.land/install.sh | sh
+else
+    echo "==> Deno already installed"
+fi
+
+echo ""
+echo "==> Bootstrap complete!"
+echo ""
+echo "Next steps:"
+echo "  1. Open a new terminal to load shell config"
+echo "  2. Start tmux and press Ctrl+b I to install tmux plugins"
+echo "  3. Authenticate with: gh auth login"
