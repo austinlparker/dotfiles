@@ -1,0 +1,92 @@
+# Lovelace theme for btop
+# Based on the Lovelace color palette
+
+# Main background
+theme[main_bg]="#1d1f28"
+
+# Main text color
+theme[main_fg]="#fdfdfd"
+
+# Title color for boxes
+theme[title]="#fdfdfd"
+
+# Highlight color for keyboard shortcuts
+theme[hi_fg]="#c574dd"
+
+# Background color of selected item in processes box
+theme[selected_bg]="#8897f4"
+
+# Foreground color of selected item in processes box
+theme[selected_fg]="#1d1f28"
+
+# Color of inactive/disabled text
+theme[inactive_fg]="#665c54"
+
+# Color of text appearing on top of graphs
+theme[graph_text]="#fdfdfd"
+
+# Background color of the percentage meters
+theme[meter_bg]="#282a36"
+
+# Misc colors for processes box
+theme[proc_misc]="#c574dd"
+
+# Cpu box outline color
+theme[cpu_box]="#c574dd"
+
+# Memory/disks box outline color
+theme[mem_box]="#5adecd"
+
+# Net up/down box outline color
+theme[net_box]="#f37f97"
+
+# Processes box outline color
+theme[proc_box]="#8897f4"
+
+# Box divider line and small boxes line color
+theme[div_line]="#282a36"
+
+# Temperature graph colors
+theme[temp_start]="#8897f4"
+theme[temp_mid]="#c574dd"
+theme[temp_end]="#f37f97"
+
+# CPU graph colors
+theme[cpu_start]="#8897f4"
+theme[cpu_mid]="#c574dd"
+theme[cpu_end]="#f37f97"
+
+# Mem/Disk free meter
+theme[free_start]="#5adecd"
+theme[free_mid]="#79e6f3"
+theme[free_end]="#8897f4"
+
+# Mem/Disk cached meter
+theme[cached_start]="#79e6f3"
+theme[cached_mid]="#5adecd"
+theme[cached_end]="#8897f4"
+
+# Mem/Disk available meter
+theme[available_start]="#f2a272"
+theme[available_mid]="#f37f97"
+theme[available_end]="#c574dd"
+
+# Mem/Disk used meter
+theme[used_start]="#5adecd"
+theme[used_mid]="#79e6f3"
+theme[used_end]="#8897f4"
+
+# Download graph colors
+theme[download_start]="#5adecd"
+theme[download_mid]="#79e6f3"
+theme[download_end]="#8897f4"
+
+# Upload graph colors
+theme[upload_start]="#f37f97"
+theme[upload_mid]="#c574dd"
+theme[upload_end]="#8897f4"
+
+# Process box color gradient for threads, mem and cpu usage
+theme[process_start]="#5adecd"
+theme[process_mid]="#8897f4"
+theme[process_end]="#c574dd"
