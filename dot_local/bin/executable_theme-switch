@@ -1,0 +1,16 @@
+#!/bin/bash
+# Switches tmux theme based on macOS appearance
+# Called by dark-notify when system theme changes
+
+THEME_DIR="$HOME/.config/tmux/themes"
+
+if [[ "$1" == "dark" ]]; then
+    THEME="lovelace"
+else
+    THEME="alabaster"
+fi
+
+# Update tmux if running
+if command -v tmux &>/dev/null && tmux list-sessions &>/dev/null; then
+    tmux source-file "$THEME_DIR/$THEME.conf"
+fi
