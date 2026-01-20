@@ -7,13 +7,6 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
-  /* Duplicated key auto-commented: "agent": {
-    "default_model": {
-      "provider": "anthropic",
-      "model": "claude-opus-4-5-thinking-latest"
-    },
-    "model_parameters": []
-  }, */
   "ssh_connections": [
     {
       "host": "tangled-knot",
@@ -32,18 +25,74 @@
       "command": "uvx",
       "args": ["kagimcp"],
       "env": {
-      "KAGI_API_KEY": "DgBALx67sAc.pwn-1oMAdLvo4j9V3946I5wIa6vsS4Sb1sS-3O8xB5o"
+        "KAGI_API_KEY": "DgBALx67sAc.pwn-1oMAdLvo4j9V3946I5wIa6vsS4Sb1sS-3O8xB5o"
+      },
+      "settings": {}
     },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"],
+      "env": {},
+      "settings": {}
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "env": null,
       "settings": {}
     }
   },
   "agent": {
-    "default_profile": "ask",
+    "profiles": {
+      "write": {
+        "name": "Write",
+        "tools": {
+          "copy_path": true,
+          "create_directory": true,
+          "create_file": true,
+          "delete_path": true,
+          "diagnostics": true,
+          "edit_file": true,
+          "fetch": true,
+          "list_directory": true,
+          "move_path": true,
+          "now": true,
+          "find_path": true,
+          "read_file": true,
+          "grep": true,
+          "terminal": true,
+          "thinking": true,
+          "web_search": true,
+          "open": true
+        },
+        "enable_all_context_servers": true,
+        "context_servers": {}
+      }
+    },
     "always_allow_tool_actions": true,
+    "default_profile": "ask",
     "default_model": {
       "provider": "anthropic",
       "model": "claude-opus-4-5-thinking-latest"
-    },
+    }
+  },
+  "language_models": {
+    "ollama": {
+      "available_models": [
+        {
+          "name": "phi4-16k:latest",
+          "display_name": "phi4 16k",
+          "max_tokens": 16384,
+          "supports_tools": false
+        },
+        {
+          "name": "deepseek-r1:8b",
+          "display_name": "deepseek-r1 8b 16k",
+          "max_tokens": 16384,
+          "supports_tools": false
+        }
+      ]
+    }
   },
   "base_keymap": "VSCode",
   "ui_font_size": 16,
@@ -68,6 +117,13 @@
     },
     "Markdown": {
       "show_edit_predictions": false
+    }
+  },
+  "lsp": {
+    "pyright": {
+      "settings": {
+        "python": { "pythonPath": ".venv/bin/python", "venvPath": "." }
+      }
     }
   }
 }

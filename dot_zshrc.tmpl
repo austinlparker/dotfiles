@@ -8,9 +8,7 @@ export GITHUB_USERNAME=austinlparker
 
 # Paths
 . "$HOME/.cargo/env"
-. "/Users/ap/.deno/env"
-export PNPM_HOME="/Users/ap/Library/pnpm"
-export PATH="/Users/ap/.codeium/windsurf/bin:$PNPM_HOME:$PATH"
+. "$HOME/.deno/env"
 
 # History
 HISTFILE=~/.zsh_history
@@ -53,13 +51,34 @@ if type rg &> /dev/null; then
   export FZF_DEFAULT_OPTS='-m'
 fi
 
-
 # bun completions
-[ -s "/Users/ap/.bun/_bun" ] && source "/Users/ap/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-alias claude="/Users/ap/.claude/local/claude"
 
-export PATH=$PATH:$(go env GOPATH)/bin
+# pnpm
+export PNPM_HOME="$HOME/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+# go
+export PATH="$PATH:$(go env GOPATH)/bin"
+
+# scripts
+export PATH="$PATH:$HOME/scripts"
+
+{{ if .isWork -}}
+# hnytools (work only)
+[ -f ~/.hnytools/hnytools.sh ] && . ~/.hnytools/hnytools.sh
+
+# Claude OTEL exports (work only)
+export OTEL_METRICS_EXPORTER=otlp
+export OTEL_LOGS_EXPORTER=otlp
+export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+export OTEL_EXPORTER_OTLP_ENDPOINT=api.honeycomb.io:443
+export OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team={{ onepasswordRead "op://dev/honeycomb/credential" "my.1password.com" }},x-honeycomb-dataset=claude-code"
+{{ end -}}

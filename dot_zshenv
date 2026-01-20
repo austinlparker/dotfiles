@@ -1,4 +1,4 @@
 . "$HOME/.cargo/env"
 
 # uv
-export PATH="/Users/ap/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
