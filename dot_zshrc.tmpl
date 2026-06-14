@@ -3,12 +3,11 @@ autoload -Uz compinit
 compinit
 autoload -Uz add-zsh-hook
 
+# Cache the Homebrew prefix once (avoids forking `brew --prefix` repeatedly).
+BREW_PREFIX="$(brew --prefix)"
+
 # Environment Variables
 export GITHUB_USERNAME=austinlparker
-
-# Paths
-. "$HOME/.cargo/env"
-. "$HOME/.deno/env"
 
 # History
 HISTFILE=~/.zsh_history
@@ -16,16 +15,15 @@ HISTSIZE=10000
 SAVEHIST=10000
 setopt share_history hist_ignore_all_dups hist_ignore_space hist_verify
 
-# Plugins
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# Auto-detect macOS appearance for starship theme
-if [[ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" == "Dark" ]]; then
-  export STARSHIP_CONFIG="$HOME/.config/starship.toml"
-else
-  export STARSHIP_CONFIG="$HOME/.config/starship-light.toml"
+# Starship prompt with live light/dark switching.
+# starship-theme-sync points ~/.config/starship-active.toml at the right theme;
+# STARSHIP_CONFIG tracks that symlink, so the prompt follows macOS appearance.
+# dark-notify re-runs the sync on change (one guarded background watcher).
+"$HOME/.local/bin/starship-theme-sync"
+if command -v dark-notify >/dev/null && ! pgrep -f 'dark-notify -c' >/dev/null; then
+  (dark-notify -c "$HOME/.local/bin/starship-theme-sync" &) >/dev/null 2>&1
 fi
+export STARSHIP_CONFIG="$HOME/.config/starship-active.toml"
 eval "$(starship init zsh)"
 
 # Aliases
@@ -46,10 +44,10 @@ glog() {
 }
 
 # Autojump
-[[ -s $(brew --prefix autojump)/etc/profile.d/autojump.sh ]] && . $(brew --prefix autojump)/etc/profile.d/autojump.sh
+[[ -s "$BREW_PREFIX/etc/profile.d/autojump.sh" ]] && . "$BREW_PREFIX/etc/profile.d/autojump.sh"
 
-# Fuzzy Finder
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Fuzzy Finder (keybindings + completion)
+command -v fzf >/dev/null && eval "$(fzf --zsh)"
 
 # ripgrep
 if type rg &> /dev/null; then
@@ -57,12 +55,10 @@ if type rg &> /dev/null; then
   export FZF_DEFAULT_OPTS='-m'
 fi
 
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
-
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # pnpm
 export PNPM_HOME="$HOME/Library/pnpm"
@@ -74,10 +70,8 @@ esac
 # go
 export PATH="$PATH:$(go env GOPATH)/bin"
 
-# scripts
+# scripts + opencode
 export PATH="$PATH:$HOME/scripts"
-
-# opencode launcher
 export PATH="$HOME/.opencode/bin:$PATH"
 
 # skepsis
@@ -94,3 +88,8 @@ eval "$(direnv hook zsh)"
 [ -f ~/.hnytools/hnytools.sh ] && . ~/.hnytools/hnytools.sh
 # Claude Code telemetry is routed per-profile by direnv (use_dev_profile), not here.
 {{ end -}}
+
+# zsh plugins — sourced LAST. zsh-syntax-highlighting must be the final thing
+# sourced so it wraps every widget/alias/function defined above.
+source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"

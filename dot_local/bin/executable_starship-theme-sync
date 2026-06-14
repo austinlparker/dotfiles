@@ -1,0 +1,8 @@
+#!/bin/bash
+# Point ~/.config/starship-active.toml at the light or dark theme based on the
+# current macOS appearance. Run at shell startup and by dark-notify on change.
+if [ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" = "Dark" ]; then
+  ln -sfn "$HOME/.config/starship.toml" "$HOME/.config/starship-active.toml"
+else
+  ln -sfn "$HOME/.config/starship-light.toml" "$HOME/.config/starship-active.toml"
+fi

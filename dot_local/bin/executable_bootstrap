@@ -50,10 +50,9 @@ else
     echo "==> TPM already installed"
 fi
 
-# Rust / Bun / Deno (not in Brewfile; upstream installers)
+# Rust / Bun (not in Brewfile; upstream installers)
 command -v rustup &>/dev/null || { echo "==> Installing Rust..."; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; source "$HOME/.cargo/env"; }
 command -v bun   &>/dev/null || { echo "==> Installing Bun...";  curl -fsSL https://bun.sh/install | bash; }
-command -v deno  &>/dev/null || { echo "==> Installing Deno..."; curl -fsSL https://deno.land/install.sh | sh; }
 
 echo ""
 echo "==> Bootstrap complete!"
