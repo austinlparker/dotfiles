@@ -66,4 +66,4 @@ echo "  4. Restore SSH keys (~/.ssh/id_ed25519, id_rsa) from backup — NOT in d
 echo "  5. tmux: Ctrl-b I to install plugins"
 echo "  6. Per-repo dev profiles: add an '.envrc' with 'use_dev_profile <name>' to each repo"
 echo "     (hound/infra: also add .envrc + CLAUDE.local.md to .git/info/exclude), then 'direnv allow'"
-echo "  7. Direct-download apps with no cask/MAS: locol, reMarkable desktop, OrcaSlicer, Creality/Crealiy Print"
+echo "  7. Direct-download apps with no cask/MAS: locol, reMarkable desktop, OrcaSlicer, Creality Print"

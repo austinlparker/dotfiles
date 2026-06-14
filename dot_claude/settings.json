@@ -12,21 +12,12 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "gopls-lsp@claude-plugins-official": true,
-    "ed3d-basic-agents@ed3d-claude-marketplace": false,
     "conversation-search@cc-conversation-search": true,
     "honeycomb@honeycomb-plugins": false,
-    "impeccable@impeccable": false,
     "skill-creator@claude-plugins-official": true,
     "plugin-dev@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
-    "impeccable": {
-      "source": {
-        "source": "github",
-        "repo": "pbakaus/impeccable"
-      }
-    },
     "otel-tracing": {
       "source": {
         "source": "git",

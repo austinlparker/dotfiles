@@ -1,26 +1,6 @@
 {
   "version": 2,
   "plugins": {
-    "gopls-lsp@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/Users/austinparker/.claude/plugins/cache/claude-plugins-official/gopls-lsp/1.0.0",
-        "version": "1.0.0",
-        "installedAt": "2026-01-20T16:44:02.332Z",
-        "lastUpdated": "2026-01-20T16:44:02.332Z",
-        "gitCommitSha": "96276205880a60fd66bbae981f5ab568e70c4cbf"
-      }
-    ],
-    "ed3d-basic-agents@ed3d-claude-marketplace": [
-      {
-        "scope": "user",
-        "installPath": "/Users/austinparker/.claude/plugins/cache/ed3d-claude-marketplace/ed3d-basic-agents/0.2.0",
-        "version": "0.2.0",
-        "installedAt": "2026-01-27T01:05:40.155Z",
-        "lastUpdated": "2026-01-27T01:05:40.155Z",
-        "gitCommitSha": "8e2b3bc9d14fc1fb96a753a9a92db70ca9146e2a"
-      }
-    ],
     "conversation-search@cc-conversation-search": [
       {
         "scope": "user",
@@ -50,16 +30,6 @@
         "installedAt": "2026-02-20T23:22:48.718Z",
         "lastUpdated": "2026-03-12T13:27:35.021Z",
         "gitCommitSha": "4b6430230f812592feb3cd575ce3b65b00ce3be5"
-      }
-    ],
-    "impeccable@impeccable": [
-      {
-        "scope": "user",
-        "installPath": "/Users/austinparker/.claude/plugins/cache/impeccable/impeccable/1.2.0",
-        "version": "1.2.0",
-        "installedAt": "2026-03-06T00:08:29.285Z",
-        "lastUpdated": "2026-03-06T00:08:29.285Z",
-        "gitCommitSha": "a9c66c4cdad75877afc2d40c4265fb74d875a27e"
       }
     ],
     "otel-tracing@otel-tracing": [
