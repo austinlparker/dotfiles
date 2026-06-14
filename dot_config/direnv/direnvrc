@@ -56,7 +56,7 @@ use_dev_profile() {
         export OTEL_METRICS_EXPORTER=otlp OTEL_LOGS_EXPORTER=otlp OTEL_TRACES_EXPORTER=otlp
         export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
         export OTEL_EXPORTER_OTLP_ENDPOINT=https://api-dogfood.honeycomb.io
-        export OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=$(op read 'op://dev/Claude Code dogfood telemetry/credential' --account J5G72KN2PVBXBBWCEMQUKLIJHM 2>/dev/null)"
+        export OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=$(op read 'op://dev/Claude Code dogfood telemetry/credential' 2>/dev/null)"
         ;;
     esac
   fi
