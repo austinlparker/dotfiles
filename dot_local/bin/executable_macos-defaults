@@ -1,0 +1,62 @@
+#!/bin/bash
+# Curated macOS developer defaults. Idempotent — safe to re-run.
+# Invoked by bootstrap on a fresh install, or manually: ~/.local/bin/macos-defaults
+set -euo pipefail
+
+echo "==> Applying macOS defaults..."
+
+# Keyboard — fast key repeat, and actually let keys repeat (needed for vim/modal).
+defaults write -g ApplePressAndHoldEnabled -bool false
+defaults write -g KeyRepeat -int 2
+defaults write -g InitialKeyRepeat -int 15
+
+# Typing — stop macOS mangling code and prose.
+defaults write -g NSAutomaticCapitalizationEnabled -bool false
+defaults write -g NSAutomaticDashSubstitutionEnabled -bool false
+defaults write -g NSAutomaticPeriodSubstitutionEnabled -bool false
+defaults write -g NSAutomaticQuoteSubstitutionEnabled -bool false
+defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
+
+# Finder — show extensions, hidden files, path/status bars, list view, POSIX path.
+defaults write com.apple.finder AppleShowAllExtensions -bool true
+defaults write com.apple.finder AppleShowAllFiles -bool true
+defaults write com.apple.finder ShowPathbar -bool true
+defaults write com.apple.finder ShowStatusBar -bool true
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+# No .DS_Store on network / USB volumes.
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+
+# Screenshots → ~/Screenshots, PNG, no window shadow.
+mkdir -p "$HOME/Screenshots"
+defaults write com.apple.screencapture location -string "$HOME/Screenshots"
+defaults write com.apple.screencapture type -string "png"
+defaults write com.apple.screencapture disable-shadow -bool true
+
+# Dock — autohide fast, no recents, modest size, don't reorder spaces.
+defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock autohide-delay -float 0
+defaults write com.apple.dock autohide-time-modifier -float 0.15
+defaults write com.apple.dock show-recents -bool false
+defaults write com.apple.dock tilesize -int 48
+defaults write com.apple.dock mru-spaces -bool false
+
+# Trackpad — tap to click.
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
+# Expand save / print panels by default.
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+
+# Don't quarantine-prompt for apps installed outside the App Store.
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+
+# Apply by restarting affected apps.
+for app in Finder Dock SystemUIServer; do killall "$app" >/dev/null 2>&1 || true; done
+
+echo "==> macOS defaults applied. A few settings need a logout/restart to fully take effect."
