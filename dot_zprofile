@@ -1,6 +1,13 @@
 # Initialize Homebrew environment
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# brew shellenv prepends /opt/homebrew/bin, which would otherwise shadow mise's
+# shims for tools brew also installs (e.g. go). Re-assert shim priority so the
+# .tool-versions pins stay authoritative in login shells too — matching the
+# intent stated in ~/.zshenv. (Interactive shells get this from `mise activate`
+# in ~/.zshrc; this covers non-interactive login shells: IDEs, agent harnesses.)
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+
 # Added by OrbStack: command-line tools and integration
 # Comment this line if you don't want it to be added again.
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
