@@ -76,4 +76,7 @@ echo "  4. Restore SSH keys (~/.ssh/id_ed25519, id_rsa) from backup — NOT in d
 echo "  5. tmux: Ctrl-b I to install plugins"
 echo "  6. Per-repo dev profiles: add an '.envrc' with 'use_dev_profile <name>' to each repo"
 echo "     (hound/infra: also add .envrc + CLAUDE.local.md to .git/info/exclude), then 'direnv allow'"
-echo "  7. Direct-download apps with no cask/MAS: locol, reMarkable desktop, OrcaSlicer, Creality Print"
+echo "  7. App Store apps (sign in, install from your purchase history — mas can't automate this):"
+echo "     1Password for Safari, Base 2, Brother iPrint&Scan, DaisyDisk, Keynote, Numbers,"
+echo "     Pages, Pixelmator Pro, Reeder, Xcode, iMovie, keymapp, reMarkable"
+echo "  8. Direct-download apps (no cask/App Store): locol, OrcaSlicer, Creality Print"

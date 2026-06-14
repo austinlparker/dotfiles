@@ -77,7 +77,6 @@ brew "lefthook"
 brew "libass"
 brew "llama.cpp"
 brew "llvm"
-brew "mas"
 brew "maven"
 brew "minikube"
 brew "mise"
@@ -133,7 +132,7 @@ cask "ghostty"
 cask "google-chrome"
 cask "granola"
 cask "halloy"
-cask "httpie"
+cask "httpie-desktop"
 cask "kaleidoscope"
 cask "linear"
 cask "ngrok"
@@ -150,16 +149,3 @@ cask "temurin"
 cask "terraform-linters/tap/tflint"
 cask "zed"
 
-mas "1Password for Safari", id: 1569813296
-mas "Base 2", id: 6744867438
-mas "Brother iPrint&Scan", id: 1193539993
-mas "DaisyDisk", id: 411643860
-mas "Keynote", id: 409183694
-mas "Numbers", id: 409203825
-mas "Pages", id: 409201541
-mas "Pixelmator Pro", id: 1289583905
-mas "Reeder", id: 6475002485
-mas "Xcode", id: 497799835
-mas "iMovie", id: 408981434
-mas "keymapp", id: 6472865291
-mas "reMarkable", id: 1276493162
