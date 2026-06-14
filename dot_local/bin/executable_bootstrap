@@ -15,9 +15,14 @@ fi
 # chezmoi + 1Password must exist BEFORE applying dotfiles, because some managed
 # files are templates that read secrets via `op` at apply time. The desktop app
 # provides biometric CLI integration (smoother than `op signin`).
-echo "==> Installing chezmoi + 1Password (CLI + desktop)..."
-brew install chezmoi 1password-cli
-brew install --cask 1password
+#
+# Each install is guarded so it's a no-op if the tool/app is already present by
+# any means (MDM, manual download, prior brew) — `brew install --cask` errors on
+# an unmanaged existing app, which would abort `set -e`.
+echo "==> Ensuring chezmoi + 1Password (CLI + desktop)..."
+command -v chezmoi >/dev/null || brew install chezmoi
+command -v op       >/dev/null || brew install 1password-cli
+[ -d "/Applications/1Password.app" ] || brew install --cask 1password
 
 # Clone the dotfiles source without applying yet.
 if [ ! -d "$HOME/.local/share/chezmoi" ]; then
