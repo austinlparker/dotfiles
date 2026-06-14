@@ -12,17 +12,17 @@ else
     echo "==> Homebrew already installed"
 fi
 
-# chezmoi + 1Password must exist BEFORE applying dotfiles, because some managed
-# files are templates that read secrets via `op` at apply time. The desktop app
-# provides biometric CLI integration (smoother than `op signin`).
+# chezmoi + the `op` CLI must exist BEFORE applying dotfiles, because some managed
+# files are templates that read secrets via `op` at apply time. Guarded so they're
+# no-ops if already present.
 #
-# Each install is guarded so it's a no-op if the tool/app is already present by
-# any means (MDM, manual download, prior brew) — `brew install --cask` errors on
-# an unmanaged existing app, which would abort `set -e`.
-echo "==> Ensuring chezmoi + 1Password (CLI + desktop)..."
+# The 1Password DESKTOP app is intentionally NOT installed here — it's owned by
+# MDM (work) or installed by you, and `brew install --cask` errors on an
+# unmanaged existing copy. The op gate below works with either the desktop app's
+# biometric integration or a plain `op signin`, however 1Password got there.
+echo "==> Ensuring chezmoi + 1Password CLI..."
 command -v chezmoi >/dev/null || brew install chezmoi
 command -v op       >/dev/null || brew install 1password-cli
-[ -d "/Applications/1Password.app" ] || brew install --cask 1password
 
 # Clone the dotfiles source without applying yet.
 if [ ! -d "$HOME/.local/share/chezmoi" ]; then
