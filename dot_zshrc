@@ -82,11 +82,9 @@ eval "$(mise activate zsh)"
 # direnv — hooks the dev-profile layer (~/.config/direnv/direnvrc)
 eval "$(direnv hook zsh)"
 
-{{ if .isWork -}}
-# hnytools (work only)
+# hnytools, when installed (guarded — safe to leave on any machine).
 [ -f ~/.hnytools/hnytools.sh ] && . ~/.hnytools/hnytools.sh
 # Claude Code telemetry is routed per-profile by direnv (use_dev_profile), not here.
-{{ end -}}
 
 # zsh plugins — sourced LAST. zsh-syntax-highlighting must be the final thing
 # sourced so it wraps every widget/alias/function defined above.
