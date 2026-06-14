@@ -6,32 +6,12 @@
 
 ## Version control
 
-Use plain `git` for all repos. Do NOT use `jj` (Jujutsu) — even if a `.jj/` directory appears in a repo, prefer `git` commands and flag the `.jj/` directory to me.
+- Follow the repo's own VCS and commit conventions — that guidance is authoritative.
+  Some repos use `git`, some use `jj` (Jujutsu); detect which (e.g. a `.jj/` directory,
+  the repo's CLAUDE.md/AGENTS.md/CONTRIBUTING) and match it. Don't impose one.
+- When the repo doesn't specify, default to: conventional-commit titles and a
+  Co-Authored-By trailer on commits.
+- Commit or push only when asked.
 
-### Hound stacked-PR workflow (squash-merge only, conventional-commit titles)
-
-For a stack of dependent PRs in `~/code/hound`:
-
-1. Cut a branch per change off the previous one:
-   ```bash
-   git switch -c branch-1 main
-   # work, commit
-   git switch -c branch-2 branch-1
-   # work, commit
-   ```
-2. Push each branch and create chained PRs:
-   ```bash
-   git push -u origin branch-1 branch-2 branch-3
-   gh pr create --head branch-1 --base main      --title "feat(scope): first change"
-   gh pr create --head branch-2 --base branch-1  --title "feat(scope): second change"
-   gh pr create --head branch-3 --base branch-2  --title "fix(scope): third change"
-   ```
-3. After a PR is squash-merged, `git fetch && git rebase origin/main` the next branch in the stack and `gh pr edit <next-branch> --base main`.
-
-### Preserving review history mid-PR
-
-Once a PR has review comments, do NOT force-push (it orphans inline comments — GitHub marks them "outdated"). Instead, push additive commits on top of the reviewed branch. Squash-merge collapses everything at PR-merge time, so the final history stays clean.
-
-Rule of thumb:
-- **Before review**: rewrite freely (rebase, amend, force-push).
-- **After review starts**: additive only (new commits on top, regular push).
+Repo-specific workflows (e.g. hound's stacked PRs, infra's apply guardrails) live in
+the per-repo dev profiles at `~/.config/dev-profiles/`, applied via direnv.

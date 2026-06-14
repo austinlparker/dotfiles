@@ -1,8 +1,7 @@
 # Personal layer — infra
 
-Austin's personal instruction layer, applied on top of the repo's own
-`CLAUDE.md`. The repo's `CLAUDE.md` is authoritative; this only adds personal
-preferences. Repo wins on conflict.
+Applied on top of the repo's own `CLAUDE.md` (authoritative; this only adds
+personal preferences). Universal VC rules come from the global `~/.claude/CLAUDE.md`.
 
 ## This repo
 
@@ -14,9 +13,9 @@ Changes here are high blast-radius and visible to the whole org.
 - Treat `terraform apply`, `packer build`, and any Argo/k8s mutation as
   confirm-first, visible-to-others actions — never run them without an explicit go.
 - `terraform plan` and read-only inspection are fine to run freely.
-- Prefer `plan` review before proposing changes; never apply on my behalf.
+- Never apply on my behalf; prefer plan review before proposing changes.
 
-## Version control
+## Review history
 
-- Plain `git` only. Conventional-commit titles. Co-Authored-By trailer on commits.
-- Commit or push only when asked.
+Once a PR has review comments, do NOT force-push. Push additive commits instead.
+- Before review: rewrite freely. After review starts: additive only.
