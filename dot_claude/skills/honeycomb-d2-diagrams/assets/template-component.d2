@@ -1,0 +1,77 @@
+# Honeycomb (Lattice) COMPONENT / DATA-FLOW d2 scaffold.
+# Copy this, replace the example nodes/edges. Keep the styling block intact.
+#
+# Render:  d2 --layout dagre --pad 40 diagram.d2 diagram.png
+# Then LOOK at the PNG before declaring it done.
+#
+# PRINCIPLE 2 — stand on its own: a node says what it IS, not its spec. Give it a
+# name and at most a ≤6-word role. No endpoint lists, field names, middlewares,
+# or invariants inside boxes — that detail lives in the prose around the diagram.
+
+direction: right
+style.fill: "#f5f7fa" # Lattice page surface
+
+title: |md
+  # [Diagram title]
+  [the one question this answers]
+| {
+  near: top-center
+  style: { font-size: 26; bold: true; font-color: "#33383f" }
+}
+
+# Card fills are Lattice banner tints (category @30% over #f5f7fa, pre-blended).
+# Pick a class by what the node IS:
+#   island=focal/new (honey) · boundary=API/gateway (blue) · runtime=compute (green)
+#   external=outside the system (neutral) · danger=legacy/error (red)
+classes: {
+  external: { style: { fill: "#e8ecf2"; stroke: "#717a89"; stroke-width: 2; font-color: "#33383f"; border-radius: 8 } }
+  island:   { style: { fill: "#f8ecc6"; stroke: "#a94a04"; stroke-width: 2; font-color: "#7a3302"; border-radius: 8 } }
+  boundary: { style: { fill: "#c8e3f7"; stroke: "#00489c"; stroke-width: 2; font-color: "#00489c"; border-radius: 8 } }
+  runtime:  { style: { fill: "#dcefcf"; stroke: "#007000"; stroke-width: 2; font-color: "#005700"; border-radius: 8 } }
+  danger:   { style: { fill: "#ecd3d6"; stroke: "#85322e"; stroke-width: 2; font-color: "#85322e"; border-radius: 8 } }
+  store:    { shape: cylinder; style: { fill: "#ffffff"; stroke: "#717a89"; stroke-width: 2; font-color: "#33383f"; font-size: 13 } }
+  group:    { style: { fill: transparent; stroke: "#717a89"; stroke-width: 2; stroke-dash: 4; border-radius: 8; font-color: "#33383f"; font-size: 16; bold: true } }
+  req:      { style: { stroke: "#0077cc"; stroke-width: 2; font-color: "#00489c"; font-size: 15 } }
+  stream:   { style: { stroke: "#007000"; stroke-dash: 4; stroke-width: 2; font-color: "#005700"; font-size: 15 } }
+  data:     { style: { stroke: "#8659b4"; stroke-width: 2; font-color: "#5e3a8c"; font-size: 15 } }
+}
+
+# Nodes: a name + an optional one-line role. That's it. (Drop the role line
+# entirely when the name speaks for itself.)
+client: "External source\nhow it enters" { class: external }
+
+gateway: "service-a\nthe entry point" { class: boundary }
+
+# Group several nodes that form one logical unit (a tier, a deployment, an island).
+core: "core service tier" {
+  class: group
+  svc_b: "service-b\nthe focal service" {
+    class: island
+    db: "store" { class: store }
+  }
+  svc_c: "service-c\nworker" {
+    class: runtime
+    db: "store" { class: store }
+  }
+}
+
+cache: "shared cache" { class: store }
+
+# Edges: terse verbs. Draw the spine, not every call.
+client -> gateway: "request" { class: req }
+gateway -> core.svc_b: "route" { class: req }
+gateway -> core.svc_c: "route" { class: req }
+core.svc_b -> cache: "read/write" { class: data }
+core.svc_c -> cache: "read/write" { class: data }
+core.svc_b -> gateway: "reply" { class: stream }
+
+# Legend: just the color key (no invariants — those go in the prose).
+legend: "Legend" {
+  near: bottom-center
+  grid-columns: 3
+  grid-gap: 10
+  style: { fill: "#ffffff"; stroke: "#717a89"; stroke-width: 2; font-color: "#33383f"; font-size: 14; border-radius: 8 }
+  k1: "request" { class: req; style.fill: "#ffffff" }
+  k2: "data read/write" { class: data; style.fill: "#ffffff" }
+  k3: "response / stream" { class: stream; style.fill: "#ffffff" }
+}

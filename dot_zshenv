@@ -2,3 +2,8 @@
 
 # uv
 export PATH="$HOME/.local/bin:$PATH"
+
+# mise shims — make .tool-versions pins authoritative in non-interactive
+# shells too (scripts, IDE-spawned processes, agent harnesses). Interactive
+# zsh still runs the full `mise activate zsh` from ~/.zshrc.
+export PATH="$HOME/.local/share/mise/shims:$PATH"

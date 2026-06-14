@@ -1,0 +1,52 @@
+# Honeycomb (Lattice) SEQUENCE diagram d2 scaffold.
+# Use when the question is "in what order do these talk?" — one request/turn's
+# lifecycle. Participant DECLARATION ORDER sets left-to-right placement; messages
+# (edges) read top-to-bottom in the order written.
+#
+# Render:  d2 --pad 40 diagram.d2 diagram.png   (layout engine is ignored here)
+# Then LOOK at the PNG.
+#
+# PRINCIPLE 2 — stand on its own: participants are just names; messages are terse
+# verbs ("invoke", "stream events"). No payload schemas, header names, or TTLs.
+
+style.fill: "#f5f7fa" # Lattice page surface
+
+title: |md
+  # [Diagram title]
+  [the one interaction this traces]
+| {
+  near: top-center
+  style: { font-size: 24; bold: true; font-color: "#33383f" }
+}
+
+classes: {
+  external: { style: { fill: "#e8ecf2"; stroke: "#717a89"; stroke-width: 2; font-color: "#33383f"; border-radius: 8 } }
+  island:   { style: { fill: "#f8ecc6"; stroke: "#a94a04"; stroke-width: 2; font-color: "#7a3302"; border-radius: 8 } }
+  boundary: { style: { fill: "#c8e3f7"; stroke: "#00489c"; stroke-width: 2; font-color: "#00489c"; border-radius: 8 } }
+  runtime:  { style: { fill: "#dcefcf"; stroke: "#007000"; stroke-width: 2; font-color: "#005700"; border-radius: 8 } }
+  req:      { style: { stroke: "#0077cc"; stroke-width: 2; font-color: "#00489c"; font-size: 14 } }
+  stream:   { style: { stroke: "#007000"; stroke-dash: 4; stroke-width: 2; font-color: "#005700"; font-size: 14 } }
+}
+
+flow: "" { # empty label — the title block above already names the diagram
+  shape: sequence_diagram
+
+  # Participants — declare in left-to-right order, style by what each one IS.
+  user:    "User"          { class: external }
+  gateway: "service-a"     { class: boundary }
+  core:    "service-b"     { class: island }
+  worker:  "service-c"     { class: runtime }
+
+  # Messages, top-to-bottom in order. Terse verbs only.
+  user -> gateway: "asks" { class: req }
+  gateway -> core: "invoke" { class: req }
+
+  # Bracket a repeated/optional stretch with a labeled group.
+  work: "while working" {
+    core -> worker: "do a step" { class: req }
+    worker -> core: "result" { class: stream }
+  }
+
+  core -> gateway: "stream answer" { class: stream }
+  gateway -> user: "render" { class: stream }
+}

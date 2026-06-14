@@ -1,0 +1,8 @@
+# Never manage nested VCS internals or OS/editor cruft via chezmoi.
+.git
+**/.git
+**/.git/**
+.DS_Store
+**/.DS_Store
+*.bak
+*-e

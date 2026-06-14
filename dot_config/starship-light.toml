@@ -7,8 +7,7 @@ $username\
 [](bg:color_yellow fg:color_orange)\
 $directory\
 [](fg:color_yellow bg:color_aqua)\
-$git_branch\
-$git_status\
+${custom.vcs}\
 [](fg:color_aqua bg:color_blue)\
 $c\
 $rust\
@@ -111,14 +110,19 @@ truncation_symbol = "…/"
 "Pictures" = " "
 "Developer" = "󰲋 "
 
-[git_branch]
-symbol = ""
+[custom.vcs]
+command = '''
+if jj root >/dev/null 2>&1; then
+  jj log -r @ --no-graph -T 'separate(" ", if(bookmarks, " " ++ bookmarks.join(" "), "◇ " ++ change_id.short(8)), if(!empty, "✱"))' 2>/dev/null
+elif git rev-parse --git-dir >/dev/null 2>&1; then
+  b=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+  [ -n "$(git status --porcelain 2>/dev/null)" ] && b="$b ✱"
+  printf ' %s' "$b"
+fi
+'''
+when = 'git rev-parse --git-dir 2>/dev/null || jj root 2>/dev/null'
 style = "bg:color_aqua"
-format = '[[ $symbol $branch ](fg:color_fg0 bg:color_aqua)]($style)'
-
-[git_status]
-style = "bg:color_aqua"
-format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)'
+format = '[[ $output ](fg:color_fg0 bg:color_aqua)]($style)'
 
 [nodejs]
 symbol = ""

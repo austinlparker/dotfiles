@@ -1,0 +1,63 @@
+# Personal cross-repo dev-profile layer.
+#
+# A repo opts in with a single line in its (gitignored / locally-excluded)
+# .envrc:   use_dev_profile hound
+#
+# This only ever writes engineer-local, gitignored files (CLAUDE.local.md).
+# It never touches a team-owned file (CLAUDE.md, AGENTS.md, committed .envrc),
+# so it is safe to use in shared repos.
+
+# use_dev_profile <name>
+#   - exports DEV_PROFILE for prompts/tooling to key off
+#   - symlinks the central profile's Claude instructions in as CLAUDE.local.md,
+#     which Claude Code layers on top of the repo's own CLAUDE.md
+#   - loads work tooling (hnytools) when present
+use_dev_profile() {
+  local profile="${1:-personal}"
+  export DEV_PROFILE="$profile"
+
+  local profile_dir="${XDG_CONFIG_HOME:-$HOME/.config}/dev-profiles"
+  local profile_src="${profile_dir}/${profile}.md"
+
+  if [ ! -f "$profile_src" ]; then
+    log_status "dev-profile '$profile' has no file at $profile_src"
+  else
+    # Layer personal Claude instructions over the repo's CLAUDE.md via the
+    # gitignored CLAUDE.local.md seam. Symlink so edits to the central profile
+    # take effect with no re-apply. Never clobber a real (non-symlink) file.
+    if [ ! -e CLAUDE.local.md ] || [ -L CLAUDE.local.md ]; then
+      ln -sfn "$profile_src" CLAUDE.local.md
+    else
+      log_status "CLAUDE.local.md exists and is not a symlink; leaving it alone"
+    fi
+    # Re-run direnv if the central profile content changes.
+    watch_file "$profile_src"
+  fi
+
+  # Work tooling, when installed.
+  [ -f "$HOME/.hnytools/hnytools.sh" ] && source "$HOME/.hnytools/hnytools.sh"
+
+  # Claude Code telemetry routing, per profile.
+  # Global settings.json carries NO telemetry config, so the default everywhere
+  # is OFF — a repo only gets telemetry by opting into a profile here.
+  # If the repo's own .envrc already set an OTLP endpoint (e.g. hound routes its
+  # local services), defer to it and don't clobber.
+  if [ -n "$OTEL_EXPORTER_OTLP_ENDPOINT" ]; then
+    export CLAUDE_CODE_ENABLE_TELEMETRY=1
+  else
+    case "$profile" in
+      personal)
+        # Personal work: no Claude Code telemetry.
+        export CLAUDE_CODE_ENABLE_TELEMETRY=0
+        ;;
+      *)
+        # Work profiles (infra, etc.) → Honeycomb dogfood.
+        export CLAUDE_CODE_ENABLE_TELEMETRY=1
+        export OTEL_METRICS_EXPORTER=otlp OTEL_LOGS_EXPORTER=otlp OTEL_TRACES_EXPORTER=otlp
+        export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+        export OTEL_EXPORTER_OTLP_ENDPOINT=https://api-dogfood.honeycomb.io
+        export OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=$(op read 'op://dev/Claude Code dogfood telemetry/credential' --account my.1password.com 2>/dev/null)"
+        ;;
+    esac
+  fi
+}

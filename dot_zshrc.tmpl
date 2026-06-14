@@ -34,6 +34,12 @@ alias ll='ls -la'
 alias gs='git status'
 alias cat='bat'
 
+# Claude: append personal system prompt on every invocation.
+# Re-reads the file each time, so edits take effect without re-sourcing.
+if [ -f "$HOME/.claude/system-prompt.md" ]; then
+  alias claude='claude --append-system-prompt "$(cat "$HOME/.claude/system-prompt.md")"'
+fi
+
 # Functions
 glog() {
   git log --oneline --graph --decorate --all
@@ -71,14 +77,20 @@ export PATH="$PATH:$(go env GOPATH)/bin"
 # scripts
 export PATH="$PATH:$HOME/scripts"
 
+# opencode launcher
+export PATH="$HOME/.opencode/bin:$PATH"
+
+# skepsis
+alias sk="npx --prefix ~/code/skepsis tsx ~/code/skepsis/cli.ts"
+
+# mise (runtime version manager)
+eval "$(mise activate zsh)"
+
+# direnv — hooks the dev-profile layer (~/.config/direnv/direnvrc)
+eval "$(direnv hook zsh)"
+
 {{ if .isWork -}}
 # hnytools (work only)
 [ -f ~/.hnytools/hnytools.sh ] && . ~/.hnytools/hnytools.sh
-
-# Claude OTEL exports (work only)
-export OTEL_METRICS_EXPORTER=otlp
-export OTEL_LOGS_EXPORTER=otlp
-export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
-export OTEL_EXPORTER_OTLP_ENDPOINT=api.honeycomb.io:443
-export OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team={{ onepasswordRead "op://dev/honeycomb/credential" "my.1password.com" }},x-honeycomb-dataset=claude-code"
+# Claude Code telemetry is routed per-profile by direnv (use_dev_profile), not here.
 {{ end -}}
