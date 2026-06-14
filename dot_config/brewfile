@@ -1,7 +1,6 @@
 # Brewfile — managed by chezmoi. Regenerate base with: brew bundle dump
 # Runtime versions (go/node/python/etc.) are managed by mise, not brew.
 
-tap "anomalyco/tap"
 tap "cameroncooke/axe"
 tap "cargo-lambda/cargo-lambda"
 tap "charmbracelet/tap"
