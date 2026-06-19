@@ -6,3 +6,6 @@
 **/.DS_Store
 *.bak
 *-e
+
+# Volatile Claude Code machine state (paths/timestamps rewritten constantly).
+.claude/plugins/installed_plugins.json

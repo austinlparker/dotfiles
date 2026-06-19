@@ -1,6 +1,19 @@
 #!/bin/bash
 set -e
 
+# Usage: bootstrap [--with-repos]
+#   --with-repos  also clone + dev-profile the Honeycomb repos (see HONEYCOMB_REPOS
+#                 below). Needs gh/SSH auth; skips cleanly if absent, so it's safe
+#                 to run 'bootstrap --with-repos' standalone once authed.
+WITH_REPOS=0
+for arg in "$@"; do
+    case "$arg" in
+        --with-repos) WITH_REPOS=1 ;;
+        -h|--help) echo "Usage: bootstrap [--with-repos]"; exit 0 ;;
+        *) echo "bootstrap: unknown option '$arg' (try --with-repos)" >&2; exit 1 ;;
+    esac
+done
+
 echo "==> Starting bootstrap..."
 
 # Homebrew
@@ -42,6 +55,9 @@ chezmoi apply
 
 # Brewfile (installs everything else, including mise)
 echo "==> Installing brew packages..."
+# Trust our non-official taps before bundling (silences trust warnings; enforced
+# if HOMEBREW_REQUIRE_TAP_TRUST is set). Keep in sync with the taps in brewfile.
+brew trust --tap cormacrelf/tap goreleaser/tap oven-sh/bun polytoken/tap rwx-cloud/tap terraform-linters/tap
 brew bundle --file="$HOME/.config/brewfile"
 
 # Runtime versions via mise (NOT pyenv/rbenv/nvm)
@@ -58,14 +74,43 @@ else
     echo "==> TPM already installed"
 fi
 
-# Rust / Bun (not in Brewfile; upstream installers)
+# Rust (not in Brewfile; upstream installer). Bun is brew-managed (oven-sh/bun).
 # --no-modify-path: chezmoi already sources ~/.cargo/env in .zshenv, so rustup
 # must not touch shell rcfiles (it errors trying to write them).
 command -v rustup &>/dev/null || { echo "==> Installing Rust..."; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path; source "$HOME/.cargo/env"; }
-command -v bun   &>/dev/null || { echo "==> Installing Bun...";  curl -fsSL https://bun.sh/install | bash; }
 
 # macOS system defaults (idempotent)
 [ -x "$HOME/.local/bin/macos-defaults" ] && "$HOME/.local/bin/macos-defaults"
+
+# Honeycomb repos (opt-in: bootstrap --with-repos). Cloned from github.com/honeycombio
+# into ~/code, each wired to its direnv dev-profile. Add repos as "<name> <profile>".
+HONEYCOMB_REPOS=(
+    "hound hound"
+    "infra infra"
+)
+if [ "$WITH_REPOS" = 1 ]; then
+    # Cloning needs SSH to GitHub (gh auth / restored keys), which may not exist yet
+    # on a fresh box — skip cleanly so re-running once authed picks up where it left off.
+    if ssh -o BatchMode=yes -o ConnectTimeout=5 -T git@github.com 2>&1 | grep -q 'successfully authenticated'; then
+        mkdir -p "$HOME/code"
+        for entry in "${HONEYCOMB_REPOS[@]}"; do
+            set -- $entry; repo="$1"; profile="$2"; dest="$HOME/code/$repo"
+            if [ -d "$dest/.git" ]; then
+                echo "==> $repo already cloned"
+            else
+                echo "==> Cloning honeycombio/$repo..."
+                git clone "git@github.com:honeycombio/$repo.git" "$dest" || { echo "    clone failed, skipping"; continue; }
+            fi
+            # dev-profile envrc + agent notes are local-only; keep them out of the repo's git.
+            [ -f "$dest/.envrc" ] || echo "use_dev_profile $profile" > "$dest/.envrc"
+            grep -qxF '.envrc' "$dest/.git/info/exclude" 2>/dev/null || printf '.envrc\nCLAUDE.local.md\n' >> "$dest/.git/info/exclude"
+            ( cd "$dest" && direnv allow ) 2>/dev/null || true
+        done
+    else
+        echo "==> --with-repos: no SSH access to github.com — skipping repo clone."
+        echo "    Run 'gh auth login' (or restore SSH keys), then: bootstrap --with-repos"
+    fi
+fi
 
 echo ""
 echo "==> Bootstrap complete!"
@@ -76,8 +121,9 @@ echo "  2. gh auth login"
 echo "  3. Install hnytools (work): restores ~/.tool-versions and the ~/.ssh/config managed block"
 echo "  4. Restore SSH keys (~/.ssh/id_ed25519, id_rsa) from backup — NOT in dotfiles"
 echo "  5. tmux: Ctrl-b I to install plugins"
-echo "  6. Per-repo dev profiles: add an '.envrc' with 'use_dev_profile <name>' to each repo"
-echo "     (hound/infra: also add .envrc + CLAUDE.local.md to .git/info/exclude), then 'direnv allow'"
+echo "  6. Honeycomb repos: re-run 'bootstrap --with-repos' (after gh auth) to clone +"
+echo "     dev-profile hound/infra automatically. Other repos: add an '.envrc' with"
+echo "     'use_dev_profile <name>', exclude .envrc + CLAUDE.local.md, then 'direnv allow'"
 echo "  7. App Store apps (sign in, install from your purchase history — mas can't automate this):"
 echo "     1Password for Safari, Base 2, Brother iPrint&Scan, DaisyDisk, Keynote, Numbers,"
 echo "     Pages, Pixelmator Pro, Reeder, Xcode, iMovie, keymapp, reMarkable"

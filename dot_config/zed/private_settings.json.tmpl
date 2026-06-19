@@ -60,7 +60,7 @@
       "command": "uvx",
       "args": ["kagimcp"],
       "env": {
-        "KAGI_API_KEY": "{{ output "op" "read" "op://dev/Kagi/credential" | trim }}",
+        "KAGI_API_KEY": "{{ output "op" "read" "--account" "parksandrec.1password.com" "op://dev/Kagi/credential" | trim }}",
       },
       "settings": {},
     },
