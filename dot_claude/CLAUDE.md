@@ -11,6 +11,7 @@
   the repo's CLAUDE.md/AGENTS.md/CONTRIBUTING) and match it. Don't impose one.
 - When the repo doesn't specify, default to: conventional-commit titles and a
   Co-Authored-By trailer on commits.
+- Always prefix branches you create for me with `ap/` (e.g. `ap/slack-service-db-wiring`).
 - Commit or push only when asked.
 
 Repo-specific workflows (e.g. hound's stacked PRs, infra's apply guardrails) live in

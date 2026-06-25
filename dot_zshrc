@@ -79,3 +79,8 @@ eval "$(direnv hook zsh)"
 # sourced so it wraps every widget/alias/function defined above.
 source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/austin/.lmstudio/bin"
+# End of LM Studio CLI section
+
